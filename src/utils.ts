@@ -1,3 +1,5 @@
+import { Message } from "./api";
+
 const commands = [
 	"register",
 	"login",
@@ -19,11 +21,23 @@ export type UserCommand = {
 	// If command is null, then args will be have a length of 1
 	args: string[];
 }
+export type UserType = "user"|"system";
 /**
  * Message as displayed onscreen
  */
 export type DisplayMessage = {
+	type: UserType;
 	user: string;
 	time: number;
 	text: string;
 }
+
+export const currentTimestamp = () => Date.now() / 1000;
+
+export const userType = (userId:number):UserType => !!userId ? "user" : "system";
+
+export const systemMessage = (text: string):Message => ({
+	user: 0,
+	text: text,
+	time: currentTimestamp(),
+});

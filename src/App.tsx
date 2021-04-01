@@ -3,21 +3,35 @@ import styled from "styled-components";
 import { MessageView } from "./MessageView";
 import { UserList } from "./UserList";
 import { UserInput } from "./UserInput";
-import { UserCommand } from "./utils";
-import messages from "./mock/messages.json";
+import { systemMessage, UserCommand } from "./utils";
+import mockMessages from "./mock/messages.json";
 import users from "./mock/users.json";
-import { Tokens } from "./api";
+import { Message, Tokens } from "./api";
 import { register } from "./server";
 
 
 export const App = () => {
+	const [ messages, setMessages ] = useState<Message[]>(mockMessages);
 	const [ tokens, setTokens ] = useState<Tokens | null>(null);
+
+	const submitMessage = async(message: Message) => {
+		// TODO
+	}
 
 	const handleSubmit = async ( { command, args }:UserCommand) => {
 		switch (command ) {
 			case "register":
-
-				const response = await register({ username: args[0], password: args[1] });
+				let msg = "";
+				try {
+					if (await register({ username: args[0], password: args[1] })) {
+						msg = "Registration complete; login now using '!login username password'";
+					} else {
+						msg = "Registration error. Please try again.";
+					}
+				} catch ( e ) {
+					msg = e;
+				}
+				await submitMessage(systemMessage(msg));
 				return;
 			default: // Not a command
 

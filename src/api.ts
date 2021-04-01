@@ -41,7 +41,7 @@ export type Tokens = {
 export type Message = {
 	// For server use. Can be used on client if you need a unique identifier
 	id?: number;
-	// User who submitted this message. Bots are users too
+	// User who submitted this message. Bots are users too. System is flagged as ID #0
 	user: number;
 	// UNIX timestamp of this message. Timezone independent!
 	time: number;
